@@ -14,11 +14,11 @@ COPY dist/hotel-front/  /usr/share/nginx/html/
 #ADD ca/ /etc/nginx/ca/
 
 #删除nginx 默认配置
-RUN rm /etc/nginx/conf.d/default.conf
+#RUN rm /etc/nginx/conf.d/default.conf
 RUN rm /etc/nginx/nginx.conf
 ADD nginx.conf /etc/nginx/
 #添加自己的配置 default.conf 在下面
-ADD default.conf /etc/nginx/conf.d/
+#ADD default.conf /etc/nginx/conf.d/
 #使用自定义nginx.conf配置端口和监听
 #COPY nginx.conf /etc/nginx/nginx.conf
 
