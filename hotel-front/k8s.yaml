@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hotel-front
+  namespace: hotel
+  labels:
+    k8s-app: hotel-front
+
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  #滚动升级时70s后认为该pod就绪
+  minReadySeconds: 70
+  strategy:
+    ##由于repliadminui为3,则整个升级,pod个数在2-4个之间
+    rollingUpdate:
+      #滚动升级时会先启动1个pod    
+      maxSurge: 1 
+      #滚动升级时允许的最大Unavailable的pod个数      
+      maxUnavailable: 1   
+  selector:
+    matchLabels:
+      k8s-app: hotel-front
+  template:
+    metadata:
+      labels:
+        k8s-app: hotel-front
+    spec:
+      containers:
+      - name: adminui
+        image: registry.cn-hangzhou.aliyuncs.com/gaoyangtest/gaoyangtest/hotel-front:build-<BUILD_TAG>
+        #env:
+        #- name: hotel-front_PROFILES_ACTIVE
+        #  value: "dev"
+        resources:
+          # need more cpu upon initialization, therefore burstable class
+          limits:
+            memory: 4096Mi
+            cpu:  2000m
+          requests:
+            cpu: 1000m
+            memory:  2048Mi
+        ports:
+        #容器的端口
+        - containerPort: 80
+          name: hotel-front
+          protocol: TCP        
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 120
+          periodSeconds: 20   
+        volumeMounts:
+        - mountPath: "/var/log/nginx/"
+          name: logsdata
+      imagePullSecrets:
+      - name: myregistrykey    
+      volumes:
+      - name: logsdata
+        hostPath:
+          path: /data/logs/
+  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hotel-front
+  namespace: hotel
+  labels:
+    k8s-app: hotel-front
+spec:
+  ports:
+  #集群IP的端口
+  - port: 80
+    name: hotel-front
+    protocol: TCP
+    #容器的端口
+    targetPort: 80
+  selector:
+    k8s-app: hotel-front
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hotel-front
+  namespace: hotel
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`hotel-front.gaoyangtest.com`) && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: hotel-front
+      port: 80  
