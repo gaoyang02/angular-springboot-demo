@@ -99,38 +99,38 @@ pipeline {
              }
           }
 
-        //stage('hotel-front deploy k8s'){
-        //  parallel {
-        //    stage('hotel-front deploy') {
-        //      when {
-        //        allOf{
-        //            environment name: 'branch', value: 'master'
-        //            environment name: 'module', value: 'hotel-front'
-        //        }
-        //      }
-        //      steps {
-        //            script {
-        //            sh "sed -i 's/<BUILD_TAG>/${BUILD_NUMBER}/g' hotel-front/k8s/k8s.yaml"
-        //            sh "kubectl apply -f hotel-front/k8s/k8s.yaml --record"
-        //          }
-        //       }
-        //    }
-        //    stage('hotel-server deploy') {
-        //      when {
-        //        allOf{
-         //           environment name: 'branch', value: 'master'
-         //           environment name: 'module', value: 'hotel-server'
-         //       }
-         //     }
-         //     steps {
-         //           script {
-         //           sh "sed -i 's/<BUILD_TAG>/${BUILD_NUMBER}/g' hotel-server/k8s/k8s.yaml"
-         //           sh "kubectl apply -f hotel-server/k8s/k8s.yaml --record"
-         //         }
-         //      }
-         //   }
-         // }       
-         //}    	            	  		   
+        stage('hotel-front deploy k8s'){
+          parallel {
+            stage('hotel-front deploy') {
+              when {
+                allOf{
+                    environment name: 'branch', value: 'master'
+                    environment name: 'module', value: 'hotel-front'
+                }
+              }
+              steps {
+                    script {
+                    sh "sed -i 's/<BUILD_TAG>/${BUILD_NUMBER}/g' hotel-front/k8s/k8s.yaml"
+                    sh "kubectl apply -f hotel-front/k8s/k8s.yaml --record"
+                  }
+               }
+            }
+            stage('hotel-server deploy') {
+              when {
+                allOf{
+                    environment name: 'branch', value: 'master'
+                    environment name: 'module', value: 'hotel-server'
+                }
+              }
+              steps {
+                    script {
+                    sh "sed -i 's/<BUILD_TAG>/${BUILD_NUMBER}/g' hotel-server/k8s/k8s.yaml"
+                    sh "kubectl apply -f hotel-server/k8s/k8s.yaml --record"
+                  }
+               }
+            }
+          }       
+        }    	            	  		   
     }       
     post {
         success {
