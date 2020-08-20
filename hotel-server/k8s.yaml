@@ -83,7 +83,7 @@ spec:
   entryPoints:
     - web
   routes:
-  - match: Host(`hotel-server.gaoyangtest.com`) && PathPrefix(`/`)
+  - match: Host(`hotel-server.hxcloud.com`) && PathPrefix(`/`)
     kind: Rule
     services:
     - name: hotel-server
