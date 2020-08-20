@@ -18,7 +18,7 @@ pipeline {
 		}	
         stage('get code'){
             steps{
-			          git branch: '${branch}', credentialsId: '665dd34e-6474-46a6-af32-5d8e044454b0', url: 'https://github.com/gaoyang02/angular-springboot-demo.git'
+			          git branch: '${branch}', credentialsId: 'ddee6088-4cf4-405c-a9a2-835e5db3e35a', url: 'https://github.com/gaoyang02/angular-springboot-demo.git'
             }
         }
         stage('build') {
