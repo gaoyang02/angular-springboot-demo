@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hotel-server
+  namespace: hotel
+  labels:
+    k8s-app: hotel-server
+
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  #滚动升级时70s后认为该pod就绪
+  minReadySeconds: 70
+  strategy:
+    ##由于replicas为3,则整个升级,pod个数在2-4个之间
+    rollingUpdate:
+      #滚动升级时会先启动1个pod    
+      maxSurge: 1 
+      #滚动升级时允许的最大Unavailable的pod个数      
+      maxUnavailable: 1   
+  selector:
+    matchLabels:
+      k8s-app: hotel-server
+  template:
+    metadata:
+      labels:
+        k8s-app: hotel-server
+    spec:
+      containers:
+      - name: hotel-server
+        image: registry.cn-hangzhou.aliyuncs.com/gaoyangtest/gaoyangtest/hotel-server:build-<BUILD_TAG> 
+        resources:
+          # need more cpu upon initialization, therefore burstable class
+          limits:
+            memory: 4096Mi
+            cpu:  2000m
+          requests:
+            cpu: 500m
+            memory:  1024Mi
+        ports:
+        #容器的端口
+        - containerPort: 8080
+          name: hotel-server
+          protocol: TCP        
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 120
+          periodSeconds: 20  
+      imagePullSecrets:
+      - name: myregistrykey    
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hotel-server
+  namespace: hotel
+  labels:
+    k8s-app: hotel-server
+spec:
+  ports:
+  #集群IP的端口
+  - port: 8080
+    name: hotel-server
+    protocol: TCP
+    #容器的端口
+    targetPort: 8080
+  selector:
+    k8s-app: hotel-server
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hotel-server
+  namespace: hotel
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`hotel-server.gaoyangtest.com`) && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: hotel-server
+      port: 8080
