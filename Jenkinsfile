@@ -45,11 +45,11 @@ pipeline {
                 }
                 steps {
                   dir("hotel-front") {
-                      sh "/usr/local/node-v10.14.0-linux-x64/bin/npm config set registry https://mirrors.huaweicloud.com/repository/npm/"
-                      sh "/usr/local/node-v10.14.0-linux-x64/bin/npm install"
-                      sh "/usr/local/node-v10.14.0-linux-x64/bin/npm config set sass_binary_site https://mirrors.huaweicloud.com/node-sass/"
-                      sh "/usr/local/node-v10.14.0-linux-x64/bin/npm install node-sass"
-                      sh "/usr/local/node-v10.14.0-linux-x64/bin/npm run build"   
+                      sh "/usr/local/node-v11.4.0-linux-x64/bin/npm config set registry https://mirrors.huaweicloud.com/repository/npm/"
+                      sh "/usr/local/node-v11.4.0-linux-x64/bin/npm install"
+                      sh "/usr/local/node-v11.4.0-linux-x64/bin/npm config set sass_binary_site https://mirrors.huaweicloud.com/node-sass/"
+                      sh "/usr/local/node-v11.4.0-linux-x64/bin/npm install node-sass"
+                      sh "/usr/local/node-v11.4.0-linux-x64/bin/npm run build"   
                   }                  
                 }
               }
