@@ -23,7 +23,7 @@ pipeline {
         }
         stage('build') {
             parallel {
-              stage('hotel-front-build') {
+              stage('hotel-server-build') {
                 when {
                   allOf{
                     environment name: 'branch', value: 'master'
@@ -130,9 +130,7 @@ pipeline {
          //      }
          //   }
          // }       
-        
-        //}     	            	  		   
-
+         //}    	            	  		   
     }       
     post {
         success {
