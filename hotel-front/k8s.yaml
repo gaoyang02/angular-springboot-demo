@@ -35,11 +35,11 @@ spec:
         resources:
           # need more cpu upon initialization, therefore burstable class
           limits:
-            memory: 4096Mi
-            cpu:  2000m
+            memory: 1024Mi
+            cpu:  1000m
           requests:
-            cpu: 1000m
-            memory:  2048Mi
+            cpu: 500m
+            memory:  512Mi
         ports:
         #容器的端口
         - containerPort: 80
