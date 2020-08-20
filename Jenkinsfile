@@ -109,10 +109,12 @@ pipeline {
                 }
               }
               steps {
-                    script {
-                    sh "sed -i 's/<BUILD_TAG>/${BUILD_NUMBER}/g' hotel-front/k8s/k8s.yaml"
-                    sh "kubectl apply -f hotel-front/k8s/k8s.yaml --record"
-                  }
+		      dir("hotel-front") {
+		          script {
+                    sh "sed -i 's/<BUILD_TAG>/${BUILD_NUMBER}/g' k8s.yaml"
+                    sh "kubectl apply -f k8s.yaml --record"
+                 	 }	      
+		          }
                }
             }
             stage('hotel-server deploy') {
@@ -123,11 +125,13 @@ pipeline {
                 }
               }
               steps {
+                  dir("hotel-server") {
                     script {
-                    sh "sed -i 's/<BUILD_TAG>/${BUILD_NUMBER}/g' hotel-server/k8s/k8s.yaml"
-                    sh "kubectl apply -f hotel-server/k8s/k8s.yaml --record"
+                    sh "sed -i 's/<BUILD_TAG>/${BUILD_NUMBER}/g' k8s.yaml"
+                    sh "kubectl apply -f k8s.yaml --record"
                   }
                }
+              }
             }
           }       
         }    	            	  		   
