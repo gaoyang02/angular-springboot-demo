@@ -9,7 +9,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone
 	
 #将dist文件中的内容复制到 /usr/share/nginx/html/ 这个目录下面
-COPY hotel-front/dist/hotel-front/  /usr/share/nginx/html/
+COPY dist/hotel-front/  /usr/share/nginx/html/
 
 #ADD ca/ /etc/nginx/ca/
 
