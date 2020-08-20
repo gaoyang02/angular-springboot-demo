@@ -56,48 +56,48 @@ pipeline {
            }
         }                               
                         
-        //stage('hotel-front image build'){
-             //parallel {
-               //stage('hotel-front-image-build') {
-                 //when {
-                   //allOf{
-                   // environment name: 'branch', value: 'master'
-                  //  environment name: 'module', value: 'hotel-front'
-                  // }
-               //  }
-               //  steps {
-               //    dir("hotel-front") {
-               //         script {                          
-				//		  def imageName = docker.build("$IMAGE_NAME")
-				//		  docker.withRegistry('http://registry.cn-hangzhou.aliyuncs.com/gaoyangtest/gaoyangtest/','49aa0fcc-6725-456e-a691-f9adf2b864b7'){
-				//		                  imageName.push()
-				//		             }                                
-                //         sh "/usr/bin/docker rmi ${IMAGE_NAME}"                               
-				//		          }   
-                //   }
-                // }
-               //}
-                //stage('hotel-server-image-build') {
-                 //when {
-                   //allOf{
-                    //environment name: 'branch', value: 'master'
-                    //environment name: 'module', value: 'hotel-server'
-                   //}
-                 //}
-                 //steps {
-                   //dir("hotel-server") {
-                        //script {                          
-						  //    def imageName = docker.build("$IMAGE_NAME")
-						  //    docker.withRegistry('http://registry.cn-hangzhou.aliyuncs.com/gaoyangtest/gaoyangtest/','49aa0fcc-6725-456e-a691-f9adf2b864b7'){
-						  //                imageName.push()
-						  //           }                                
-                         //sh "/usr/bin/docker rmi ${IMAGE_NAME}"                               
-						  //        }   
-                   //}
-                 //}
-               //}
-             //}
-          //}
+        stage('hotel-front image build'){
+             parallel {
+               stage('hotel-front-image-build') {
+                 when {
+                   allOf{
+                    environment name: 'branch', value: 'master'
+                    environment name: 'module', value: 'hotel-front'
+                   }
+                 }
+                 steps {
+                   dir("hotel-front") {
+                        script {                          
+						  def imageName = docker.build("$IMAGE_NAME")
+						  docker.withRegistry('http://registry.cn-hangzhou.aliyuncs.com/gaoyangtest/gaoyangtest/','49aa0fcc-6725-456e-a691-f9adf2b864b7'){
+						                  imageName.push()
+						             }                                
+                         sh "/usr/bin/docker rmi ${IMAGE_NAME}"                               
+						          }   
+                   }
+                 }
+               }
+                stage('hotel-server-image-build') {
+                 when {
+                   allOf{
+                    environment name: 'branch', value: 'master'
+                    environment name: 'module', value: 'hotel-server'
+                   }
+                 }
+                 steps {
+                   dir("hotel-server") {
+                        script {                          
+						      def imageName = docker.build("$IMAGE_NAME")
+						      docker.withRegistry('http://registry.cn-hangzhou.aliyuncs.com/gaoyangtest/gaoyangtest/','49aa0fcc-6725-456e-a691-f9adf2b864b7'){
+						                  imageName.push()
+						             }                                
+                         sh "/usr/bin/docker rmi ${IMAGE_NAME}"                               
+						          }   
+                   }
+                 }
+               }
+             }
+          }
 
         //stage('hotel-front deploy k8s'){
         //  parallel {
