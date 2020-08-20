@@ -18,7 +18,7 @@ pipeline {
 		}	
         stage('get code'){
             steps{
-			          git branch: '${branch}', credentialsId: '8a39c067-5817-4047-95c4-ba0b50024bd1', url: 'https://github.com/gaoyang02/angular-springboot-demo.git'
+			          git branch: '${branch}', credentialsId: 'b2eec583-ee4c-482f-8eb5-71c95a5a0752', url: 'https://github.com/gaoyang02/angular-springboot-demo.git'
             }
         }
         stage('build') {
@@ -68,8 +68,8 @@ pipeline {
                //  steps {
                //    dir("hotel-front") {
                //         script {                          
-				//		                 def imageName = docker.build("$IMAGE_NAME")
-				//		                 docker.withRegistry('http://registry.cn-hangzhou.aliyuncs.com/gaoyangtest/gaoyangtest/','5dbc8045-871d-451b-874c-8756eda3dadc'){
+				//		  def imageName = docker.build("$IMAGE_NAME")
+				//		  docker.withRegistry('http://registry.cn-hangzhou.aliyuncs.com/gaoyangtest/gaoyangtest/','40f5fcc2-85c1-41ce-87c3-51e5b98f8f9d'){
 				//		                  imageName.push()
 				//		             }                                
                 //         sh "/usr/bin/docker rmi ${IMAGE_NAME}"                               
@@ -87,8 +87,8 @@ pipeline {
                  //steps {
                    //dir("hotel-server") {
                         //script {                          
-						  //               def imageName = docker.build("$IMAGE_NAME")
-						  //               docker.withRegistry('http://registry.cn-hangzhou.aliyuncs.com/gaoyangtest/gaoyangtest/','5dbc8045-871d-451b-874c-8756eda3dadc'){
+						  //    def imageName = docker.build("$IMAGE_NAME")
+						  //    docker.withRegistry('http://registry.cn-hangzhou.aliyuncs.com/gaoyangtest/gaoyangtest/','40f5fcc2-85c1-41ce-87c3-51e5b98f8f9d'){
 						  //                imageName.push()
 						  //           }                                
                          //sh "/usr/bin/docker rmi ${IMAGE_NAME}"                               
